@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="container">
+
+        <h1>Greet</h1>
+        {{!-- <div class="message"> --}}
+
+        {{!-- </div> --}}
+     
+
+        <form action="/greetings" method="POST">
+         <div class="error">
+        {{#if messages.info}}
+        <div class="entry">
+            <h1> {{messages.info}}</h1>
+        </div>
+        {{/if}}
+        </div>
+            <div class="greet">
+                <label for="name">Name: </label>
+                <input type="text" name="name" value=""><br><br>
+                <div class="counter">
+
+                    {{greetMessage.counter}}
+                    <div>
+
+                        <a href="/greeted/">greeted names</a>
+
+                    </div>
+                </div>
+
+
+                <div>
+
+                    <input type="radio" name="language" value="English">English
+                    <input type="radio" name="language" value="Sotho">Sotho
+                    <input type="radio" name="language" value="Afrikaans"> Afrikaans
+                </div>
+                <div class="message">
+                    {{greetMessage.message}}
+
+                </div>
+                <div class="submit">
+                    <input type="submit" value="Submit">
+
+
+                </div>
+        </form>
+
+
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,42 @@
+body{
+    background-color: aqua;
+    display: flexbox;
+    border: black;
+}
+.container{
+margin: auto;
+  width: 50%;
+
+  padding: 10px;
+
+}
+.submit{
+    padding: 1em
+  
+    
+    
+}
+.greet{
+  border-bottom: solid black;
+}
+.counter{
+  padding: 1em;
+  font-size: large;
+}
+.message{
+  padding: 1em;
+  margin: 0.5em;
+  width: 10em;
+  border: 0,1em solid;
+   border-radius:0,20em ;
+   background-color: burlywood;
+}
+.count{
+  font: bold;
+}
+.error{
+font-size: xx-small;
+  font-family: monospace;
+  font-style: italic;
+  color: red;
+}
