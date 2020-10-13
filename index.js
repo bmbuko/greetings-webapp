@@ -5,44 +5,60 @@ const exphbs = require('express-handlebars');
 const Greetings = require("./greet")
 const bodyParser = require('body-parser');
 
+const pg = require("pg")
+const Pool = pg.Pool;
 
+const connectionString = process.env.DATABASE_URL || 'postgresql://codex-coder:pg123@localhost:5432/greet_people'
 
+const pool = new Pool({
+  connectionString
+});
 let app = express();
-const greetings = Greetings()
+const greetings = Greetings(pool)
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
-
 app.use(express.static("public"));
-
 app.use(bodyParser.urlencoded({ extended: false }));
-
 app.use(bodyParser.json());
-  // initialise session middleware - flash-express depends on it
-  app.use(session({
-    secret : "<add a secret string here>",
-    resave: false,
-    saveUninitialized: true
-  }));
 
-  // initialise the flash middleware
-  app.use(flash());
-  app.get('/', function (req, res) {
+// initialise session middleware - flash-express depends on it
+app.use(session({
+  secret: "<add a secret string here>",
+  resave: false,
+  saveUninitialized: true
+}));
+// initialise the flash middleware
+app.use(flash());
+
+
+
+app.get('/', async function (req, res){
+
+  var greetMessage = {
   
-    res.render('greet', {
-      title: 'Home'
-    })
-  });
+    counter: await greetings.counter(),
+  }
+
+
+  res.render('greet', {
+    title: 'Home',
+    greetMessage
+  })
+});
 
 // app.get('/addFlash', function (req, res) {
 //     req.flash('info', 'Flash Message Added');
 //     res.redirect('/');
 //   });
 
-app.post("/greetings", function (req, res) {
-    const name = req.body.name
-    const lang = req.body.language
-  if (  name === '' && lang === undefined) {
+app.post("/greetings", async function (req, res) {
+  console.log(req.body)
+  const name = req.body.name
+  const lang = req.body.language
+
+
+  if (name === '' && lang === undefined) {
     req.flash('info', 'error, enter name and language!');
   }
   else if (lang === undefined) {
@@ -52,34 +68,43 @@ app.post("/greetings", function (req, res) {
   else if (name === '') {
     req.flash('info', 'error,enter name!');
   }
-  else{
+  else {
+
+    var msg = greetings.greet(name, lang)
+
+   await greetings.addName(name);
+
     var greetMessage = {
-         message: greetings.greet(name, lang),
-        countNames:greetings.addName(name),
-        counter: greetings.counter(),
+  
+      message: msg,
+      counter: await greetings.counter(),
     }
 
   }
-    // const countNames = req.body.countNames
+  // const countNames = req.body.countNames
 
-    res.render("greet", {
-        greetMessage
-    });
+  res.render("greet", {
+    greetMessage
+  });
 
 });
-app.get("/greeted",function(req,res){
-    console.log(greetings.storedNames());
-    res.render("greeted",{
-      greeted: greetings.storedNames()  
-    })
-})
-app.get("/counter/:userName",function(req,res){
-    const userName = req.params.userName;
-    // console.log(greetings.userCounter(userName));
-   // var names =greetings.counter(userName)
-    res.render("greetings",{ userName, 
-    count: greetings.userCounter(userName) }
-    )
+
+app.get("/greeted", async function (req, res) {
+  // console.log(greetings.storedNames());
+  res.render("greeted", {
+    greeted: await greetings.storedNames()
+  })
+});
+
+app.get("/counter/:userName",async function (req, res) {
+  const userName = req.params.userName;
+  // console.log(greetings.userCounter(userName));
+  // var names =greetings.counter(userName)
+  res.render("greetings", {
+    userName,
+    count: await greetings.userCounter(userName)
+  }
+  )
 })
 
 

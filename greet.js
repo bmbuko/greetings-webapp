@@ -1,8 +1,12 @@
-module.exports=function Greetings() {
+module.exports = function Greetings(pool) {
 
-    const namesList = {};
+    //const namesList = {};
 
-    function greet(name, language) {
+     function greet(name, language) {
+         
+         if(!language){
+             return "enter lang"
+         }
 
         if (language === "English") {
             return "Morning, " + name;
@@ -15,38 +19,87 @@ module.exports=function Greetings() {
             return "More, " + name;
         }
 
+    
     }
-    function addName(name) {
-        if (namesList[name] === undefined) {
-           namesList[name] = 0;
+
+
+
+    async function addName(name) {
+
+        // check if the name is in the db
+
+        const checkingSQL = "select count(*) from users where Name = $1";
+        const results = await pool.query(checkingSQL, [name])
+
+        // console.log(results.rows.length);
+        
+
+        if (results.rows.length > 0 && results.rows[0].count == 0 ) {
+            // if not in the db then insert it...
+
+            const insertSQL = "insert into users( Name, counter ) values ($1, 1)"
+            await pool.query(insertSQL, [name]);
+
+        } else {
+            // otherwise update the counter.
+
+            const updateSQL = "update users set counter = counter + 1 where Name = $1;";
+            await pool.query(updateSQL, [name]);
+
         }
-        namesList[name]++
+
+
+        // if (namesList[name] === undefined) {
+        //     namesList[name] = 0;
+        // }
+        // namesList[name]++
 
     }
 
-    function counter() {
-        return Object.keys(namesList).length;
-    }
-    function storedNames() {
-        return namesList
+    async function counter() {
+        // return Object.keys(namesList).length;
+        const sql = "select * from users";
+        const results = await pool.query(sql);
+        return results.rows.length
     }
 
-function userCounter(name) {
-    for (var key in namesList) {
-        // console.log(namesList[key])
-        if (key === name ) {
-            var value = namesList[key];
-        }
+    async function storedNames() {
+
+        const sql = "select * from users";
+        const results = await pool.query(sql);
+
+        const userObject = {};
+
+        results.rows.forEach(function (user) {
+            userObject[user.name] = user.counter
+        });
+        return userObject;
     }
-    return value;
-}
+
+    async function userCounter(name) {
+        const checkingSQL = "select * from users where name = $1";
+        const results = await pool.query(checkingSQL, [name])
+        return results.rows[0]["counter"]
+
+        // for (var key in namesList) {
+        //     // console.log(namesList[key])
+        //     if (key === name) {
+        //         var value = namesList[key];
+        //     }
+        // }
+        // return value;
+
+    }
+
+
 
     return {
         greet,
         addName,
         counter,
         storedNames,
-        userCounter
+        userCounter,
+        
     }
 }
 

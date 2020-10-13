@@ -1,42 +1,70 @@
-body{
-    background-color: aqua;
-    display: flexbox;
-    border: black;
+body {
+  background-image: url("../images/greet.jpg"), url("paper.gif");
+  background-repeat: no-repeat,repeat;
+  background-color: #cccccc;
+  background-size: cover
 }
-.container{
-margin: auto;
-  width: 50%;
 
-  padding: 10px;
 
-}
-.submit{
-    padding: 1em
+
   
-    
-    
+
+
+.container {
+  margin: auto;
+  width: 50%;
+  padding: 100px;
+  
 }
-.greet{
-  border-bottom: solid black;
+
+.submit {
+  padding: 1em
 }
-.counter{
+
+.counter {
   padding: 1em;
   font-size: large;
+  font: bold;
 }
-.message{
+
+.message {
   padding: 1em;
   margin: 0.5em;
   width: 10em;
-  border: 0,1em solid;
-   border-radius:0,20em ;
-   background-color: burlywood;
+  border: 0, 1em solid black;
+  border-radius: 0, 20em;
+  background-color: burlywood;
+  
+  
 }
-.count{
+
+.count {
   font: bold;
 }
-.error{
-font-size: xx-small;
+
+.error {
+  font-size: xx-small;
   font-family: monospace;
   font-style: italic;
   color: red;
+}
+
+.radiobtn {
+  align-self: start;
+}
+
+@media (max-height:500px) {
+  .container {
+    flex-direction: column;
+  }
+  body {
+    background-color: seagreen;
+    
+  }
+  .message {
+    flex-direction: column;
+  }
+  .radiobtn {
+    display:flex
+  }
 }

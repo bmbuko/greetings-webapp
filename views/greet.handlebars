@@ -28,6 +28,7 @@
             <div class="greet">
                 <label for="name">Name: </label>
                 <input type="text" name="name" value=""><br><br>
+            </div>
                 <div class="counter">
 
                     {{greetMessage.counter}}
@@ -37,14 +38,16 @@
 
                     </div>
                 </div>
+                
 
 
-                <div>
+                <div class="radiobtn">
 
                     <input type="radio" name="language" value="English">English
                     <input type="radio" name="language" value="Sotho">Sotho
                     <input type="radio" name="language" value="Afrikaans"> Afrikaans
                 </div>
+                
                 <div class="message">
                     {{greetMessage.message}}
 
@@ -55,7 +58,9 @@
 
                 </div>
         </form>
-
+<button type="reset" name="reset">reset
+    
+</button>
 
     </div>
 </body>
