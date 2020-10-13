@@ -35,6 +35,7 @@ app.use(flash());
 
 app.get('/', async function (req, res){
 
+try {
   var greetMessage = {
   
     counter: await greetings.counter(),
@@ -45,6 +46,10 @@ app.get('/', async function (req, res){
     title: 'Home',
     greetMessage
   })
+} catch (error) {
+  console.log(error)
+  
+}
 });
 
 // app.get('/addFlash', function (req, res) {
@@ -53,7 +58,8 @@ app.get('/', async function (req, res){
 //   });
 
 app.post("/greetings", async function (req, res) {
-  console.log(req.body)
+  try {
+    console.log(req.body)
   const name = req.body.name
   const lang = req.body.language
 
@@ -86,18 +92,27 @@ app.post("/greetings", async function (req, res) {
   res.render("greet", {
     greetMessage
   });
+  } catch (error) {
+    console.log(error);
+    
+  }
 
 });
 
 app.get("/greeted", async function (req, res) {
   // console.log(greetings.storedNames());
-  res.render("greeted", {
-    greeted: await greetings.storedNames()
-  })
+  try {
+    res.render("greeted", {
+      greeted: await greetings.storedNames()
+    })
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 app.get("/counter/:userName",async function (req, res) {
-  const userName = req.params.userName;
+  try {
+    const userName = req.params.userName;
   // console.log(greetings.userCounter(userName));
   // var names =greetings.counter(userName)
   res.render("greetings", {
@@ -105,6 +120,10 @@ app.get("/counter/:userName",async function (req, res) {
     count: await greetings.userCounter(userName)
   }
   )
+  } catch (error) {
+    console.log(error);
+    
+  }
 })
 
 
