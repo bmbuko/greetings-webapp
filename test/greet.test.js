@@ -64,7 +64,7 @@ describe('The greetings', function () {
         const countee = await greetings.counter();
         assert.equal(3, countee);
 
-    })
+    });
 
 
 

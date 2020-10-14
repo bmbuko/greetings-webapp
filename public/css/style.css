@@ -4,17 +4,19 @@ body {
   background-color: #cccccc;
   background-size: cover
 }
-
-
-
-  
-
+.header{
+  padding: 60px;
+  text-align: center;
+  background: #1abc9c;
+  color: white;
+  font-size: 30px;
+}
 
 .container {
+  max-width: 500px;
   margin: auto;
-  width: 50%;
-  padding: 100px;
-  
+  background: white;
+  padding: 20px;
 }
 
 .submit {
@@ -52,6 +54,15 @@ body {
 .radiobtn {
   align-self: start;
 }
+.reset{
+  float: left;
+    
+    
+   
+    
+} 
+
+
 
 @media (max-height:500px) {
   .container {

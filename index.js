@@ -13,8 +13,10 @@ const connectionString = process.env.DATABASE_URL || 'postgresql://codex-coder:p
 const pool = new Pool({
   connectionString
 });
-let app = express();
-const greetings = Greetings(pool)
+
+const greetings = Greetings(pool);
+
+var app = express();
 
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
@@ -122,8 +124,14 @@ app.get("/counter/:userName",async function (req, res) {
   )
   } catch (error) {
     console.log(error);
+
     
   }
+  
+})
+app.get("/reset",async (req, res)=>{
+  await greetings.resetData()
+ res.redirect("/")
 })
 
 

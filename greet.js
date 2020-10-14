@@ -1,13 +1,13 @@
 module.exports = function Greetings(pool) {
 
     //const namesList = {};
+    
 
-     function greet(name, language) {
-         
-         if(!language){
-             return "enter lang"
-         }
+    function greet(name, language) {
 
+        name = name.toUpperCase().charAt(0) + name.slice(1).toLowerCase();
+
+        
         if (language === "English") {
             return "Morning, " + name;
         }
@@ -19,7 +19,7 @@ module.exports = function Greetings(pool) {
             return "More, " + name;
         }
 
-    
+
     }
 
 
@@ -27,14 +27,14 @@ module.exports = function Greetings(pool) {
     async function addName(name) {
 
         // check if the name is in the db
-
+        name = name.toUpperCase().charAt(0) + name.slice(1).toLowerCase();
         const checkingSQL = "select count(*) from users where Name = $1";
         const results = await pool.query(checkingSQL, [name])
 
         // console.log(results.rows.length);
-        
 
-        if (results.rows.length > 0 && results.rows[0].count == 0 ) {
+
+        if (results.rows.length > 0 && results.rows[0].count == 0) {
             // if not in the db then insert it...
 
             const insertSQL = "insert into users( Name, counter ) values ($1, 1)"
@@ -77,6 +77,7 @@ module.exports = function Greetings(pool) {
     }
 
     async function userCounter(name) {
+        name = name.toUpperCase().chartAt(0) + name.slice(1).toLowerCase();
         const checkingSQL = "select * from users where name = $1";
         const results = await pool.query(checkingSQL, [name])
         return results.rows[0]["counter"]
@@ -90,6 +91,12 @@ module.exports = function Greetings(pool) {
         // return value;
 
     }
+    async function resetData() {
+        const deleteSQl = "delete from users"
+        await pool.query(deleteSQl)
+
+
+    }
 
 
 
@@ -99,7 +106,8 @@ module.exports = function Greetings(pool) {
         counter,
         storedNames,
         userCounter,
-        
+        resetData
+
     }
 }
 
