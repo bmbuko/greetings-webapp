@@ -1,5 +1,6 @@
 let express = require('express');
 const flash = require('express-flash');
+const route =require("./routes");
 const session = require('express-session');
 const exphbs = require('express-handlebars');
 const Greetings = require("./greet")
@@ -15,6 +16,7 @@ const pool = new Pool({
 });
 
 const greetings = Greetings(pool);
+const routing =route(greetings)
 
 var app = express();
 
@@ -35,104 +37,17 @@ app.use(flash());
 
 
 
-app.get('/', async function (req, res){
-
-try {
-  var greetMessage = {
-  
-    counter: await greetings.counter(),
-  }
-
-
-  res.render('greet', {
-    title: 'Home',
-    greetMessage
-  })
-} catch (error) {
-  console.log(error)
-  
-}
-});
+app.get('/',routing.display)
 
 // app.get('/addFlash', function (req, res) {
 //     req.flash('info', 'Flash Message Added');
 //     res.redirect('/');
 //   });
 
-app.post("/greetings", async function (req, res) {
-  try {
-    console.log(req.body)
-  const name = req.body.name
-  const lang = req.body.language
-
-
-  if (name === '' && lang === undefined) {
-    req.flash('info', 'error, enter name and language!');
-  }
-  else if (lang === undefined) {
-    req.flash('info', 'error,select language!');
-
-  }
-  else if (name === '') {
-    req.flash('info', 'error,enter name!');
-  }
-  else {
-
-    var msg = greetings.greet(name, lang)
-
-   await greetings.addName(name);
-
-    var greetMessage = {
-  
-      message: msg,
-      counter: await greetings.counter(),
-    }
-
-  }
-  // const countNames = req.body.countNames
-
-  res.render("greet", {
-    greetMessage
-  });
-  } catch (error) {
-    console.log(error);
-    
-  }
-
-});
-
-app.get("/greeted", async function (req, res) {
-  // console.log(greetings.storedNames());
-  try {
-    res.render("greeted", {
-      greeted: await greetings.storedNames()
-    })
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-app.get("/counter/:userName",async function (req, res) {
-  try {
-    const userName = req.params.userName;
-  // console.log(greetings.userCounter(userName));
-  // var names =greetings.counter(userName)
-  res.render("greetings", {
-    userName,
-    count: await greetings.userCounter(userName)
-  }
-  )
-  } catch (error) {
-    console.log(error);
-
-    
-  }
-  
-})
-app.get("/reset",async (req, res)=>{
-  await greetings.resetData()
- res.redirect("/")
-})
+app.post("/greetings",routing.greeting)
+app.get("/greeted",routing.greetedNames)
+app.get("/counter/:userName",routing.user)
+app.get("/reset",routing.deleteData)
 
 
 
