@@ -77,7 +77,8 @@ module.exports = function Greetings(pool) {
     }
 
     async function userCounter(name) {
-        name = name.toUpperCase().chartAt(0) + name.slice(1).toLowerCase();
+        
+        name = name.toUpperCase().charAt(0) + name.slice(1).toLowerCase();
         const checkingSQL = "select * from users where name = $1";
         const results = await pool.query(checkingSQL, [name])
         return results.rows[0]["counter"]

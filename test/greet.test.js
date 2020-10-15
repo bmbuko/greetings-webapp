@@ -65,6 +65,14 @@ describe('The greetings', function () {
         assert.equal(3, countee);
 
     });
+    it ("should be able to delete from database ", async ()=>{
+        await greetings.addName('Namhla');
+        await greetings.addName('Sihle');
+        await greetings.addName('Zola');
+        await greetings.resetData()
+        const reset = await greetings.storedNames();
+        assert.deepEqual({},reset);
+    })
 
 
 

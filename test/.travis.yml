@@ -1,0 +1,14 @@
+language: node_js
+
+env:
+  - DATABASE_URL=postgresql://postgres@localhost:5432/greet_people_tests'
+
+node_js:  
+  - "8.9.4"
+
+before_script:
+  - psql -c 'create database  greet_people_tests';' -U postgres
+  - psql -U postgres -d greet_people_tests' -a -f tests.sql
+
+services:
+  - postgresql
