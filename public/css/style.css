@@ -64,7 +64,7 @@ body {
 
 
 
-@media (max-height:500px) {
+@media (max-height:600px) {
   .container {
     flex-direction: column;
   }
