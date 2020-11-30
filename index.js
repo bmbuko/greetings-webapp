@@ -9,8 +9,8 @@ const bodyParser = require('body-parser');
 const pg = require("pg")
 const Pool = pg.Pool;
 
-const connectionString = process.env.DATABASE_URL || 'postgresql://codex-coder:pg123@localhost:5432/greet_people'
 
+const connectionString = process.env.DATABASE_URL || 'postgresql://codex-coder:pg123@localhost:5432/greet_people'
 const pool = new Pool({
   connectionString
 });
